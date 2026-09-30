@@ -20,8 +20,8 @@ export function MetricsSection() {
       </div>
 
       <Reveal delay={240} className="mt-5">
-        <div className="clay-brutal rounded-clay bg-white p-5 text-center">
-          <p className="font-mono text-sm tracking-wide text-ink/70 font-semibold">
+        <div className="clay-brutal rounded-clay bg-white p-4 sm:p-5 text-center">
+          <p className="font-mono text-xs sm:text-sm tracking-wide text-ink/70 font-semibold leading-relaxed">
             Multiple cross-platform projects — Android • iOS • Amazon • Web • Native Turbo Bridges
           </p>
         </div>

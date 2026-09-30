@@ -8,16 +8,20 @@ import { SkillsSection } from "@/components/SkillsSection";
 import { WhatIDoSection } from "@/components/WhatIDoSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
+import { ClientShell } from "@/components/ClientShell";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-paper text-ink selection:bg-accent selection:text-ink">
+    <div className="min-h-screen bg-paper text-ink selection:bg-accent selection:text-ink relative">
+      {/* Client Shell for Toasts and Floating Dock */}
+      <ClientShell />
+
       {/* Sticky Header Navigation */}
       <Header />
 
       {/* Main Content Sections */}
       <main className="overflow-x-hidden">
-        {/* Hero Section with 3D Interactive Phone */}
+        {/* Hero Section with Interactive 3D Phone & Tabs */}
         <HeroSection />
 
         {/* Continuous Tech Stack Marquee */}

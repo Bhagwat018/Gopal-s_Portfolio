@@ -2,10 +2,14 @@
 
 import { useState } from "react";
 import { PERSONAL_DATA } from "@/lib/data";
-import { FileText, Download, Check, Menu, X } from "lucide-react";
+import { FileText, Download, Check, Menu, X, Copy, Phone } from "lucide-react";
 import confetti from "canvas-confetti";
 
-export function Header() {
+interface HeaderProps {
+  onCopyEmail?: () => void;
+}
+
+export function Header({ onCopyEmail }: HeaderProps) {
   const [downloadState, setDownloadState] = useState<"idle" | "downloading" | "done">("idle");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -22,7 +26,6 @@ export function Header() {
         colors: ["#c6ff3d", "#5b4cff", "#8fd3ff", "#ff8fc7"],
       });
 
-      // Trigger actual download or view
       const link = document.createElement("a");
       link.href = PERSONAL_DATA.profile.resumeUrl;
       link.download = `${PERSONAL_DATA.profile.name.replace(/\s+/g, "_")}_Resume.pdf`;
@@ -38,7 +41,7 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 px-4 pt-4 sm:px-6">
+    <header className="sticky top-0 z-40 px-4 pt-4 sm:px-6">
       <nav className="mx-auto flex max-w-6xl items-center justify-between rounded-clay-sm border-3 border-ink bg-paper/90 px-4 py-3 shadow-brutal-sm backdrop-blur">
         {/* Logo / Monogram */}
         <a
@@ -171,6 +174,16 @@ export function Header() {
               className="rounded-xl border-2 border-ink bg-accent p-3 font-mono text-sm font-bold text-ink transition hover:bg-ink hover:text-paper"
             >
               ✉️ Contact Me
+            </a>
+            <a
+              href={PERSONAL_DATA.profile.telUrl}
+              onClick={() => setMobileMenuOpen(false)}
+              className="rounded-xl border-2 border-ink bg-clay-sky p-3 font-mono text-sm font-bold text-ink transition hover:bg-white flex items-center justify-between"
+            >
+              <span className="flex items-center gap-1.5">
+                <Phone className="h-4 w-4" /> Call Directly
+              </span>
+              <span className="text-xs font-semibold">{PERSONAL_DATA.profile.phoneDisplay}</span>
             </a>
             <button
               onClick={(e) => {

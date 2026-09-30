@@ -5,21 +5,34 @@ export interface ProjectLink {
 }
 
 export interface Project {
+  id: string;
   title: string;
   subtitle: string;
   category: string;
+  type: "all" | "apps" | "sdk";
   badge: string;
   description: string;
   tags: string[];
   links: ProjectLink[];
+  preview: {
+    accentColor: string;
+    label: string;
+    sublabel: string;
+    stat: string;
+    metricLabel: string;
+  };
 }
 
 export interface NpmPackage {
+  id: string;
   title: string;
   name: string;
   description: string;
   tags: string[];
   url: string;
+  installCommand: string;
+  version: string;
+  downloads: string;
 }
 
 export interface Experience {
@@ -67,28 +80,32 @@ export const PERSONAL_DATA = {
     title: "Mobile Engineer specializing in React Native",
     location: "Indore, India",
     email: "gopalbhagwat21@gmail.com",
+    phone: "+91 6267957589",
+    phoneDisplay: "+91 62679 57589",
+    telUrl: "tel:+916267957589",
+    whatsappUrl: "https://wa.me/916267957589",
     github: "https://github.com/Bhagwat018",
     linkedin: "https://www.linkedin.com/in/gopal-bhagwat-a22b02247/",
     tagline: "import { Dev } from 'react-native'",
     resumeUrl: "/resume.pdf",
     shortSummary:
-      "Results-driven Mobile Engineer with 3+ years of React Native experience delivering 4 production apps for iOS, Android, and Amazon.",
+      "Results-driven Mobile Engineer with 3+ years of React Native experience delivering 6+ production apps for iOS, Android, and Amazon.",
     longSummary:
       "I specialize in cross-platform mobile app development, native bridging (Kotlin/Swift), and real-time streaming integrations. Recipient of the Code Commander Award 2025 for outstanding technical contributions and project delivery.",
     stats: [
       { value: "3+", label: "Years experience", bgColor: "bg-accent" },
-      { value: "4+", label: "Production apps published", bgColor: "bg-clay-sky" },
+      { value: "6+", label: "Production apps published", bgColor: "bg-clay-sky" },
       { value: "2025", label: "Code Commander Award", bgColor: "bg-clay-pink" },
     ],
     pills: [
       "3+ yrs experience",
-      "4+ apps published",
+      "6+ apps published",
       "Indore, MP, India",
     ],
     phoneStats: {
       time: "09:41",
       network: "5G ●●●",
-      todayBuilds: "4 production apps shipped",
+      todayBuilds: "6+ production apps shipped",
       fpsTarget: "60.0",
       crashFree: "99.9%",
       buildStatus: "✓ Build passed (iOS/Android)",
@@ -115,7 +132,7 @@ export const PERSONAL_DATA = {
 
   milestoneHighlights: [
     {
-      title: "4+ Production Apps Published",
+      title: "6+ Production Apps Published",
       description:
         "Shipped & maintained high-performing live apps on Apple App Store, Google Play Store, and Amazon Appstore.",
       icon: "smartphone",
@@ -197,13 +214,22 @@ export const PERSONAL_DATA = {
 
   featuredProjects: [
     {
+      id: "truvideo",
       title: "TruVideo",
       subtitle: "Enterprise Automotive SDK & Turbo Modules",
       category: "Mobile SDK • Android & iOS",
+      type: "sdk",
       badge: "Turbo Module Bridges",
       description:
         "React Native and Turbo Module bridges for an enterprise automotive SDK. Seamlessly connects native Android (Kotlin) and iOS (Swift) subsystems to enterprise applications with high-throughput native messaging.",
       tags: ["React Native", "Turbo Modules", "Kotlin", "Swift", "Android SDK", "iOS SDK", "JNI"],
+      preview: {
+        accentColor: "bg-clay-sky",
+        label: "TurboModule Bridge Diagnostics",
+        sublabel: "Active Kotlin/Swift IPC Link",
+        stat: "1.2ms",
+        metricLabel: "IPC Roundtrip Latency",
+      },
       links: [
         {
           label: "Website",
@@ -213,13 +239,22 @@ export const PERSONAL_DATA = {
       ],
     },
     {
+      id: "kickscore",
       title: "KickScore",
       subtitle: "Real-Time Sports Platform (100K+ Users)",
       category: "Mobile App & Web Platform",
+      type: "apps",
       badge: "100K+ Active Users",
       description:
         "Cross-platform mobile application and web platform delivering real-time sports scores to 100K+ users with sub-second WebSocket updates, comprehensive live match stats, dynamic feeds, and push notifications.",
       tags: ["React Native", "Next.js", "WebSockets", "Firebase", "Redux Toolkit", "Tailwind CSS"],
+      preview: {
+        accentColor: "bg-accent",
+        label: "Live Scoreboard Feed",
+        sublabel: "Sub-Second WebSocket Sync",
+        stat: "100K+",
+        metricLabel: "Active Mobile Users",
+      },
       links: [
         {
           label: "Google Play",
@@ -234,13 +269,80 @@ export const PERSONAL_DATA = {
       ],
     },
     {
+      id: "visualible",
+      title: "Visualible",
+      subtitle: "AI-Powered Contextual eBook Reader Platform",
+      category: "Mobile App & Web Platform",
+      type: "apps",
+      badge: "Custom EPUB Engine",
+      description:
+        "A comprehensive digital reading platform with a custom EPUB reader engine, inline AI context lookup, encrypted SQLite offline storage, authentication, and StoreKit/Google Play billing.",
+      tags: ["React Native CLI", "TypeScript", "EPUB.js", "Firebase", "SQLite", "Next.js"],
+      preview: {
+        accentColor: "bg-clay-sky",
+        label: "AI Contextual eBook Reader",
+        sublabel: "Inline Knowledge Graph Lookup",
+        stat: "60 FPS",
+        metricLabel: "Page Rendering Speed",
+      },
+      links: [
+        {
+          label: "Google Play",
+          url: "https://play.google.com/store/apps/details?id=com.visualible&pcampaignid=web_share",
+          type: "play-store",
+        },
+        {
+          label: "Website",
+          url: "https://visualible.com/",
+          type: "web",
+        },
+      ],
+    },
+    {
+      id: "veels",
+      title: "Veels",
+      subtitle: "Mobile Video Streaming & Media Discovery",
+      category: "Mobile App • Streaming & OTT",
+      type: "apps",
+      badge: "HLS Video Streaming",
+      description:
+        "High-performance mobile video streaming and media discovery application. Engineered smooth vertical video feed scrolling, custom HLS streaming player with adaptive bitrate, user authentication, and offline caching.",
+      tags: ["React Native", "HLS Player", "Video Streaming", "TypeScript", "Redux Toolkit", "REST APIs"],
+      preview: {
+        accentColor: "bg-clay-pink",
+        label: "Adaptive HLS Video Engine",
+        sublabel: "Dynamic Buffer & Feed Preload",
+        stat: "0.4s",
+        metricLabel: "Playback Startup Latency",
+      },
+      links: [
+        {
+          label: "Google Play",
+          url: "https://play.google.com/store/apps/details?id=com.veelsappstreaming&pcampaignid=web_share",
+          type: "play-store",
+        },
+      ],
+    },
+  ] as Project[],
+
+  independentProjects: [
+    {
+      id: "savekit",
       title: "SaveKit",
       subtitle: "Offline-First Mobile Utility & Status Tool",
-      category: "Mobile App • Utility",
+      category: "Independent App • Solo Developed",
+      type: "apps",
       badge: "Offline-First SQLite",
       description:
-        "Offline-first mobile app utilizing robust local SQLite persistence and Google AdMob monetization. Built for frictionless media management, instant local file scanning, and bulletproof offline reliability.",
+        "Independently created and published offline-first mobile utility utilizing robust local SQLite persistence and Google AdMob monetization. Built for frictionless media management, instant local file scanning, and bulletproof offline reliability.",
       tags: ["React Native CLI", "SQLite", "Google AdMob", "TypeScript", "Android & iOS"],
+      preview: {
+        accentColor: "bg-clay-mint",
+        label: "Encrypted SQLite Engine",
+        sublabel: "Local Offline-First Persistence",
+        stat: "0ms",
+        metricLabel: "Offline Query Delay",
+      },
       links: [
         {
           label: "Google Play",
@@ -250,13 +352,22 @@ export const PERSONAL_DATA = {
       ],
     },
     {
+      id: "invoicely",
       title: "Invoicely",
       subtitle: "Offline Proforma & Tax Invoice Suite",
-      category: "Mobile App • FinTech / Productivity",
+      category: "Independent App • Solo Developed",
+      type: "apps",
       badge: "Local Data Handling",
       description:
-        "Offline proforma and tax invoice React Native app tailored for robust local data handling, offline client ledgers, itemized invoice calculation, and on-device PDF export without server roundtrips.",
+        "Independently created offline proforma and tax invoice React Native app tailored for robust local data handling, offline client ledgers, itemized invoice calculation, and on-device PDF export without server roundtrips.",
       tags: ["React Native", "SQLite", "PDF Generator", "TypeScript", "Redux Toolkit"],
+      preview: {
+        accentColor: "bg-clay-peach",
+        label: "Local Ledger & PDF Generator",
+        sublabel: "On-Device Invoice Compilation",
+        stat: "100%",
+        metricLabel: "Offline Availability",
+      },
       links: [
         {
           label: "Google Play",
@@ -269,20 +380,28 @@ export const PERSONAL_DATA = {
 
   npmPackages: [
     {
+      id: "layout-kit",
       title: "react-native-responsive-layout-kit",
       name: "react-native-responsive-layout-kit",
       description:
         "Pure TypeScript utility package for cross-platform UI development. Provides dynamic scaling, percentage dimensions, aspect ratio controls, and screen-size responsive hooks.",
-      tags: ["TypeScript", "React Native", "NPM", "Zero-Dependency", "Responsive UI"],
+      tags: ["TypeScript", "React Native", "Zero-Dependency", "Responsive UI"],
       url: "https://www.npmjs.com/package/react-native-responsive-layout-kit",
+      installCommand: "npm i react-native-responsive-layout-kit",
+      version: "v1.2.0",
+      downloads: "Active on NPM",
     },
     {
+      id: "shimmer-craft",
       title: "react-native-shimmer-craft",
       name: "react-native-shimmer-craft",
       description:
         "Advanced UI loading skeletons and shimmer effects for React Native. Delivers smooth, 60 FPS placeholder animations with customizable gradients and layout shapes.",
-      tags: ["React Native", "Reanimated", "TypeScript", "NPM", "Shimmer UI"],
+      tags: ["React Native", "Reanimated", "TypeScript", "Shimmer UI"],
       url: "https://www.npmjs.com/package/react-native-shimmer-craft",
+      installCommand: "npm i react-native-shimmer-craft",
+      version: "v1.0.4",
+      downloads: "Active on NPM",
     },
   ] as NpmPackage[],
 

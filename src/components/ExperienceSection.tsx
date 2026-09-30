@@ -89,7 +89,7 @@ export function ExperienceSection() {
                   </p>
                 </div>
                 <span
-                  className={`whitespace-nowrap rounded-full border-2 border-ink px-4 py-1.5 font-mono text-xs font-bold shadow-brutal-sm ${
+                  className={`inline-block self-start sm:self-auto sm:whitespace-nowrap rounded-full border-2 border-ink px-3 sm:px-4 py-1.5 font-mono text-xs font-bold shadow-brutal-sm ${
                     exp.current ? "bg-accent text-ink" : "bg-white text-ink"
                   }`}
                 >

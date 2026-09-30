@@ -3,15 +3,31 @@
 import { useState } from "react";
 import { PERSONAL_DATA } from "@/lib/data";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { FileText, Download, Check, RefreshCw } from "lucide-react";
+import {
+  FileText,
+  Download,
+  Check,
+  RefreshCw,
+  Copy,
+  Zap,
+  Activity,
+  Layers,
+  Sparkles,
+} from "lucide-react";
 import confetti from "canvas-confetti";
 
-export function HeroSection() {
+interface HeroSectionProps {
+  onCopyEmail?: () => void;
+}
+
+export function HeroSection({ onCopyEmail }: HeroSectionProps) {
+  const [phoneTab, setPhoneTab] = useState<"builds" | "hermes" | "turbo">("builds");
   const [buildCounter, setBuildCounter] = useState(0);
   const [downloadState, setDownloadState] = useState<"idle" | "downloading" | "done">("idle");
+  const [emailCopied, setEmailCopied] = useState(false);
 
   const buildQuotes = [
-    "4 production apps shipped",
+    "6+ production apps shipped",
     "Hermes: 35% faster loads",
     "TurboModules compiled",
     "Zero native memory leaks",
@@ -21,11 +37,11 @@ export function HeroSection() {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
+  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
+  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
 
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["12deg", "-12deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-12deg", "12deg"]);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["14deg", "-14deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-14deg", "14deg"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -48,6 +64,13 @@ export function HeroSection() {
     setBuildCounter((prev) => (prev + 1) % buildQuotes.length);
   };
 
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(PERSONAL_DATA.profile.email);
+    setEmailCopied(true);
+    if (onCopyEmail) onCopyEmail();
+    setTimeout(() => setEmailCopied(false), 2000);
+  };
+
   const handleDownload = () => {
     if (downloadState !== "idle") return;
     setDownloadState("downloading");
@@ -55,8 +78,8 @@ export function HeroSection() {
     setTimeout(() => {
       setDownloadState("done");
       confetti({
-        particleCount: 40,
-        spread: 50,
+        particleCount: 50,
+        spread: 60,
         origin: { y: 0.6 },
         colors: ["#c6ff3d", "#5b4cff", "#8fd3ff", "#ff8fc7"],
       });
@@ -78,20 +101,26 @@ export function HeroSection() {
       <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
         {/* Left Column: Greeting, Headline, Summaries, CTAs */}
         <div>
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-block rounded-full border-2 border-ink bg-white px-3 py-1 font-mono text-xs font-semibold text-ink shadow-brutal-sm"
+            className="flex items-center gap-2 flex-wrap"
           >
-            import &#123; Dev &#125; from &apos;react-native&apos;
-          </motion.p>
+            <span className="inline-block rounded-full border-2 border-ink bg-white px-3 py-1 font-mono text-xs font-semibold text-ink shadow-brutal-sm">
+              import &#123; Dev &#125; from &apos;react-native&apos;
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full border-2 border-ink bg-clay-mint px-3 py-1 font-mono text-xs font-bold text-ink shadow-brutal-sm">
+              <span className="h-2 w-2 rounded-full bg-green-600 animate-pulse" />
+              Available for work
+            </span>
+          </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="mt-5 font-display text-[2.6rem] font-bold leading-[1.05] tracking-tight sm:text-6xl text-ink"
+            className="mt-5 font-display text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] sm:leading-[1.05] tracking-tight text-ink break-words"
           >
             Mobile Engineer &amp;
             <br />
@@ -124,47 +153,36 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-8 flex flex-wrap items-center gap-3"
+            className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
           >
             <a
               href="#work"
-              className="btn-press rounded-full border-2 border-ink bg-ink px-6 py-3 font-mono text-xs sm:text-sm font-bold text-paper shadow-brutal hover:bg-ink/90 transition"
+              className="btn-press rounded-full border-2 border-ink bg-ink px-6 py-3 font-mono text-xs sm:text-sm font-bold text-paper shadow-brutal hover:bg-ink/90 transition text-center justify-center inline-flex items-center"
             >
               See the work ↓
             </a>
             <a
               href="#contact"
-              className="btn-press rounded-full border-2 border-ink bg-white px-6 py-3 font-mono text-xs sm:text-sm font-bold text-ink shadow-brutal hover:bg-accent transition"
+              className="btn-press rounded-full border-2 border-ink bg-white px-6 py-3 font-mono text-xs sm:text-sm font-bold text-ink shadow-brutal hover:bg-accent transition text-center justify-center inline-flex items-center"
             >
               Hire me →
             </a>
             <button
-              onClick={handleDownload}
-              aria-live="polite"
-              className="btn-press relative inline-flex items-center gap-2 overflow-hidden rounded-full border-2 border-ink bg-clay-peach font-mono font-medium shadow-brutal px-6 py-3 text-sm sm:hidden text-ink"
+              onClick={handleCopyEmail}
+              className="btn-press inline-flex items-center justify-center gap-1.5 rounded-full border-2 border-ink bg-white px-4 py-3 font-mono text-xs sm:text-sm font-bold text-ink shadow-brutal hover:bg-clay-sky transition"
+              title="Copy email to clipboard"
             >
-              <span
-                aria-hidden="true"
-                className={`pointer-events-none absolute inset-0 origin-left bg-accent transition-transform duration-[900ms] ease-out ${
-                  downloadState === "downloading" || downloadState === "done"
-                    ? "scale-x-100"
-                    : "scale-x-0"
-                }`}
-              />
-              <span className="relative flex items-center gap-2">
-                <span className="relative flex h-4 w-4 items-center justify-center">
-                  {downloadState === "idle" && <FileText className="h-4 w-4" />}
-                  {downloadState === "downloading" && (
-                    <Download className="h-4 w-4 animate-bounce" />
-                  )}
-                  {downloadState === "done" && <Check className="h-4 w-4" />}
-                </span>
-                <span>
-                  {downloadState === "idle" && "Download Resume"}
-                  {downloadState === "downloading" && "Preparing..."}
-                  {downloadState === "done" && "Downloaded!"}
-                </span>
-              </span>
+              {emailCopied ? (
+                <>
+                  <Check className="h-4 w-4 text-green-600 stroke-[3]" />
+                  <span>Email Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="h-4 w-4 text-ink/70" />
+                  <span>Copy Email</span>
+                </>
+              )}
             </button>
           </motion.div>
 
@@ -186,11 +204,11 @@ export function HeroSection() {
           </motion.div>
         </div>
 
-        {/* Right Column: 3D Interactive Phone Mockup */}
+        {/* Right Column: 3D Interactive Phone Mockup with Tabs */}
         <div
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          className="relative mx-auto flex h-[420px] w-[280px] items-center justify-center [perspective:1200px] sm:h-[480px] sm:w-[320px]"
+          className="relative mx-auto flex h-[440px] w-[280px] items-center justify-center [perspective:1200px] sm:h-[500px] sm:w-[320px]"
         >
           {/* Background Morphing Blobs */}
           <div
@@ -213,13 +231,13 @@ export function HeroSection() {
               className="transition-transform duration-150 ease-out"
             >
               {/* Phone Outer Shell */}
-              <div className="relative h-[400px] w-[220px] rounded-clay-lg border-[3px] border-ink bg-ink p-2 shadow-brutal-lg sm:h-[460px] sm:w-[248px]">
+              <div className="relative h-[420px] w-[230px] rounded-clay-lg border-[3px] border-ink bg-ink p-2 shadow-brutal-lg sm:h-[480px] sm:w-[258px]">
                 {/* Dynamic Island / Notch */}
                 <div className="absolute left-1/2 top-2.5 z-20 h-2.5 w-16 -translate-x-1/2 rounded-full bg-paper/90 shadow-sm" />
 
                 {/* Inner Screen */}
                 <div className="relative h-full w-full overflow-hidden rounded-[26px] bg-panel p-3 flex flex-col justify-between">
-                  {/* Status Bar */}
+                  {/* Top Status Bar & App Header */}
                   <div>
                     <div className="flex justify-between items-center font-mono text-[10px] text-ink/50 pt-1">
                       <span>{PERSONAL_DATA.profile.phoneStats.time}</span>
@@ -228,66 +246,158 @@ export function HeroSection() {
                       </span>
                     </div>
 
-                    {/* Today's Builds Interactive Card */}
-                    <div
-                      onClick={cycleBuild}
-                      className="mt-3 cursor-pointer btn-press rounded-clay-sm border-2 border-ink bg-accent p-3 shadow-clay transition"
-                    >
-                      <div className="flex justify-between items-center">
-                        <p className="font-display text-xs font-bold text-ink">Today&apos;s builds</p>
-                        <span className="text-[9px] rounded-full bg-ink text-paper px-1.5 py-0.5 font-mono flex items-center gap-1">
-                          <RefreshCw className="h-2.5 w-2.5" /> Tap ↺
-                        </span>
-                      </div>
-                      <p className="font-mono text-[11px] text-ink/80 mt-1 font-medium">
-                        {buildQuotes[buildCounter]}
-                      </p>
+                    {/* Interactive Phone Tabs */}
+                    <div className="mt-2.5 flex items-center justify-between rounded-lg border border-ink/20 bg-white/80 p-0.5 font-mono text-[9px]">
+                      <button
+                        onClick={() => setPhoneTab("builds")}
+                        className={`flex-1 rounded py-1 font-bold transition ${
+                          phoneTab === "builds" ? "bg-ink text-paper" : "text-ink/60"
+                        }`}
+                      >
+                        Builds
+                      </button>
+                      <button
+                        onClick={() => setPhoneTab("hermes")}
+                        className={`flex-1 rounded py-1 font-bold transition ${
+                          phoneTab === "hermes" ? "bg-ink text-paper" : "text-ink/60"
+                        }`}
+                      >
+                        Hermes
+                      </button>
+                      <button
+                        onClick={() => setPhoneTab("turbo")}
+                        className={`flex-1 rounded py-1 font-bold transition ${
+                          phoneTab === "turbo" ? "bg-ink text-paper" : "text-ink/60"
+                        }`}
+                      >
+                        Turbo
+                      </button>
                     </div>
 
-                    {/* 2-Column Metrics */}
-                    <div className="mt-2.5 grid grid-cols-2 gap-2">
-                      <div className="rounded-clay-sm border-2 border-ink bg-clay-sky p-2 shadow-clay">
-                        <p className="font-mono text-[10px] text-ink/60">FPS Target</p>
-                        <p className="font-display text-lg font-bold text-ink">
-                          {PERSONAL_DATA.profile.phoneStats.fpsTarget}
-                        </p>
-                      </div>
-                      <div className="rounded-clay-sm border-2 border-ink bg-clay-pink p-2 shadow-clay">
-                        <p className="font-mono text-[10px] text-ink/60">Crash-free</p>
-                        <p className="font-display text-lg font-bold text-ink">
-                          {PERSONAL_DATA.profile.phoneStats.crashFree}
-                        </p>
-                      </div>
-                    </div>
+                    {/* Screen View: Builds */}
+                    {phoneTab === "builds" && (
+                      <div className="animate-pop">
+                        <div
+                          onClick={cycleBuild}
+                          className="mt-2 cursor-pointer btn-press rounded-clay-sm border-2 border-ink bg-accent p-2.5 shadow-clay transition"
+                        >
+                          <div className="flex justify-between items-center">
+                            <p className="font-display text-xs font-bold text-ink">Today&apos;s builds</p>
+                            <span className="text-[9px] rounded-full bg-ink text-paper px-1.5 py-0.5 font-mono flex items-center gap-1">
+                              <RefreshCw className="h-2 w-2" /> Tap ↺
+                            </span>
+                          </div>
+                          <p className="font-mono text-[10px] text-ink/80 mt-1 font-medium">
+                            {buildQuotes[buildCounter]}
+                          </p>
+                        </div>
 
-                    {/* Performance Chart Card */}
-                    <div className="mt-2.5 rounded-clay-sm border-2 border-ink bg-white p-2 shadow-clay">
-                      <p className="font-mono text-[9px] text-ink/50 mb-1">
-                        Bundle render performance
-                      </p>
-                      <div className="flex items-end justify-between gap-1 h-11">
-                        {[45, 70, 35, 90, 60, 100, 75].map((val, i) => (
-                          <div
-                            key={i}
-                            className="w-2 rounded-full bg-indigo transition-all duration-300 hover:bg-accent cursor-pointer"
-                            style={{ height: `${val}%` }}
-                            title={`Metric ${i + 1}: ${val}%`}
-                          />
-                        ))}
+                        <div className="mt-2 grid grid-cols-2 gap-1.5">
+                          <div className="rounded-clay-sm border-2 border-ink bg-clay-sky p-2 shadow-clay">
+                            <p className="font-mono text-[9px] text-ink/60">FPS Target</p>
+                            <p className="font-display text-base font-bold text-ink">
+                              {PERSONAL_DATA.profile.phoneStats.fpsTarget}
+                            </p>
+                          </div>
+                          <div className="rounded-clay-sm border-2 border-ink bg-clay-pink p-2 shadow-clay">
+                            <p className="font-mono text-[9px] text-ink/60">Crash-free</p>
+                            <p className="font-display text-base font-bold text-ink">
+                              {PERSONAL_DATA.profile.phoneStats.crashFree}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="mt-2 rounded-clay-sm border-2 border-ink bg-white p-2 shadow-clay">
+                          <p className="font-mono text-[9px] text-ink/50 mb-1">
+                            Bundle render performance
+                          </p>
+                          <div className="flex items-end justify-between gap-1 h-10">
+                            {[45, 70, 35, 90, 60, 100, 75].map((val, i) => (
+                              <div
+                                key={i}
+                                className="w-2 rounded-full bg-indigo transition-all duration-300 hover:bg-accent cursor-pointer"
+                                style={{ height: `${val}%` }}
+                                title={`Render checkpoint ${i + 1}: ${val}%`}
+                              />
+                            ))}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    )}
+
+                    {/* Screen View: Hermes */}
+                    {phoneTab === "hermes" && (
+                      <div className="mt-2 space-y-2 animate-pop font-mono text-[10px]">
+                        <div className="rounded-clay-sm border-2 border-ink bg-clay-mint p-2 shadow-clay">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-ink flex items-center gap-1">
+                              <Zap className="h-3 w-3 text-indigo" /> Bytecode Engine
+                            </span>
+                            <span className="rounded bg-ink px-1.5 py-0.5 text-[8px] text-paper">
+                              ACTIVE
+                            </span>
+                          </div>
+                          <p className="mt-1 text-[11px] font-bold text-ink">Hermes Runtime V0.74</p>
+                        </div>
+                        <div className="rounded-clay-sm border-2 border-ink bg-white p-2 shadow-clay">
+                          <div className="flex justify-between py-0.5 border-b border-ink/10">
+                            <span className="text-ink/60">Launch Time</span>
+                            <span className="font-bold text-green-700">-35% faster</span>
+                          </div>
+                          <div className="flex justify-between py-0.5 border-b border-ink/10">
+                            <span className="text-ink/60">Heap Memory</span>
+                            <span className="font-bold text-ink">-28% footprint</span>
+                          </div>
+                          <div className="flex justify-between py-0.5">
+                            <span className="text-ink/60">Time to Interactive</span>
+                            <span className="font-bold text-ink">340 ms</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Screen View: Turbo */}
+                    {phoneTab === "turbo" && (
+                      <div className="mt-2 space-y-2 animate-pop font-mono text-[10px]">
+                        <div className="rounded-clay-sm border-2 border-ink bg-clay-sky p-2 shadow-clay">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-ink flex items-center gap-1">
+                              <Layers className="h-3 w-3 text-indigo" /> Native Bridges
+                            </span>
+                            <span className="rounded bg-accent px-1.5 py-0.5 text-[8px] font-bold text-ink">
+                              SYNC
+                            </span>
+                          </div>
+                          <p className="mt-1 text-[11px] font-bold text-ink">C++ TurboModules</p>
+                        </div>
+                        <div className="rounded-clay-sm border-2 border-ink bg-white p-2 shadow-clay">
+                          <div className="flex justify-between py-0.5 border-b border-ink/10">
+                            <span className="text-ink/60">Android JNI</span>
+                            <span className="font-bold text-ink">Kotlin 2.0</span>
+                          </div>
+                          <div className="flex justify-between py-0.5 border-b border-ink/10">
+                            <span className="text-ink/60">iOS Host</span>
+                            <span className="font-bold text-ink">Swift 5.9</span>
+                          </div>
+                          <div className="flex justify-between py-0.5">
+                            <span className="text-ink/60">IPC Overhead</span>
+                            <span className="font-bold text-green-700">~0 ms (Direct)</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* App Version / Monogram Footer inside Phone */}
                   <div className="flex items-center justify-between border-t border-ink/10 pt-2 font-mono text-[9px] text-ink/60">
-                    <span>RN 0.74 • TurboModules</span>
+                    <span>RN 0.74 • New Arch</span>
                     <span className="font-bold text-ink">GB-v2.6</span>
                   </div>
 
                   {/* Floating Pop-out Badge */}
                   <div
                     onClick={cycleBuild}
-                    className="absolute -right-1 top-24 w-[160px] cursor-pointer animate-pop rounded-clay-sm border-2 border-ink bg-clay-mint p-2 shadow-clay transition hover:scale-105 [animation-delay:0.8s] [animation-fill-mode:backwards]"
+                    className="absolute -right-1 top-24 w-[160px] cursor-pointer animate-pop rounded-clay-sm border-2 border-ink bg-clay-mint p-2 shadow-clay transition hover:scale-105"
                   >
                     <div className="flex justify-between items-start">
                       <p className="font-mono text-[9px] leading-tight font-bold text-ink/90">

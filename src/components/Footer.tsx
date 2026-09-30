@@ -1,5 +1,5 @@
 import { PERSONAL_DATA } from "@/lib/data";
-import { Mail, MapPin, Github, Linkedin, ArrowUp } from "lucide-react";
+import { Mail, MapPin, Github, Linkedin, ArrowUp, Phone, MessageSquare } from "lucide-react";
 
 export function Footer() {
   return (
@@ -78,6 +78,15 @@ export function Footer() {
                   <span className="truncate">{PERSONAL_DATA.profile.email}</span>
                 </a>
               </li>
+              <li>
+                <a
+                  href={PERSONAL_DATA.profile.telUrl}
+                  className="flex items-center gap-2 text-sm text-paper/80 transition hover:text-accent"
+                >
+                  <Phone className="h-4 w-4 flex-shrink-0 text-accent" />
+                  <span>{PERSONAL_DATA.profile.phoneDisplay}</span>
+                </a>
+              </li>
               <li className="flex items-center gap-2 text-sm text-paper/80">
                 <MapPin className="h-4 w-4 flex-shrink-0 text-accent" />
                 <span>{PERSONAL_DATA.profile.location}</span>
@@ -91,6 +100,15 @@ export function Footer() {
               Connect
             </p>
             <div className="mt-4 flex flex-col gap-3 font-sans">
+              <a
+                href={PERSONAL_DATA.profile.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-press inline-flex items-center gap-2 rounded-full border-2 border-paper/40 bg-white/5 px-4 py-2 text-sm text-paper transition hover:border-accent hover:text-accent"
+              >
+                <MessageSquare className="h-4 w-4" />
+                WhatsApp Chat
+              </a>
               <a
                 href={PERSONAL_DATA.profile.linkedin}
                 target="_blank"
