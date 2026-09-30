@@ -216,7 +216,7 @@ export function HeroSection({ onCopyEmail }: HeroSectionProps) {
         <div
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          className="relative mx-auto flex h-[440px] w-[280px] items-center justify-center [perspective:1200px] sm:h-[500px] sm:w-[320px]"
+          className="relative mx-auto flex h-[440px] w-full max-w-[280px] items-center justify-center [perspective:1200px] sm:h-[500px] sm:max-w-[320px]"
         >
           {/* Background Morphing Blobs */}
           <div

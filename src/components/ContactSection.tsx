@@ -48,7 +48,7 @@ export function ContactSection({ onCopyEmail }: ContactSectionProps) {
   return (
     <section id="contact" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
       <Reveal>
-        <div className="clay-brutal relative overflow-hidden rounded-clay-lg bg-indigo px-6 py-16 text-center sm:px-16">
+        <div className="clay-brutal relative overflow-hidden rounded-clay-lg bg-indigo px-4 py-12 text-center sm:px-16 sm:py-16">
           {/* Ambient Morphing Blobs */}
           <div
             className="pointer-events-none absolute -left-10 -top-10 h-40 w-40 animate-blob bg-clay-mint/40"
@@ -63,7 +63,7 @@ export function ContactSection({ onCopyEmail }: ContactSectionProps) {
             // let&apos;s build something
           </p>
 
-          <h2 className="mt-3 font-display text-3xl font-bold text-paper sm:text-5xl tracking-tight">
+          <h2 className="mt-3 font-display text-2xl xs:text-3xl sm:text-5xl font-bold text-paper tracking-tight">
             Got an app idea?
             <br />
             Let&apos;s make it feel native.
@@ -180,7 +180,7 @@ export function ContactSection({ onCopyEmail }: ContactSectionProps) {
           </div>
 
           {/* Instant Message Composer */}
-          <div className="mt-10 rounded-clay border-3 border-ink bg-white p-6 sm:p-8 text-left shadow-clay text-ink max-w-2xl mx-auto">
+          <div className="mt-10 rounded-clay border-3 border-ink bg-white p-4 sm:p-8 text-left shadow-clay text-ink max-w-2xl mx-auto">
             <div className="flex items-center justify-between border-b-2 border-dashed border-ink/15 pb-3">
               <div>
                 <h3 className="font-display text-lg sm:text-xl font-bold text-ink">

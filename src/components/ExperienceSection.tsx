@@ -88,13 +88,18 @@ export function ExperienceSection() {
                     {exp.company}
                   </p>
                 </div>
-                <span
-                  className={`inline-block self-start sm:self-auto sm:whitespace-nowrap rounded-full border-2 border-ink px-3 sm:px-4 py-1.5 font-mono text-xs font-bold shadow-brutal-sm ${
-                    exp.current ? "bg-accent text-ink" : "bg-white text-ink"
-                  }`}
-                >
-                  {exp.period} ({exp.location})
-                </span>
+                <div className="flex flex-wrap items-center gap-1.5 self-start sm:self-auto">
+                  <span
+                    className={`inline-block rounded-full border-2 border-ink px-3 py-1 font-mono text-[11px] sm:text-xs font-bold shadow-brutal-sm ${
+                      exp.current ? "bg-accent text-ink" : "bg-white text-ink"
+                    }`}
+                  >
+                    {exp.period}
+                  </span>
+                  <span className="rounded-full border border-ink/30 bg-paper px-2.5 py-1 font-mono text-[10px] font-semibold text-ink/75">
+                    {exp.location}
+                  </span>
+                </div>
               </div>
 
               {/* Description */}

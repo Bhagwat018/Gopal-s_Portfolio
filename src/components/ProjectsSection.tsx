@@ -490,14 +490,14 @@ export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
               transition={{ duration: 0.3 }}
               key={project.id}
             >
-              <article className="clay-brutal group flex h-full flex-col justify-between rounded-clay bg-white p-6 transition-all hover:-translate-y-1">
+              <article className="clay-brutal group flex h-full flex-col justify-between rounded-clay bg-white p-5 sm:p-6 transition-all hover:-translate-y-1">
                 <div>
                   {/* Top Meta Header */}
-                  <div className="flex items-center justify-between gap-2 border-b-2 border-dashed border-ink/15 pb-3">
-                    <span className="font-mono text-[11px] font-bold text-ink/60 uppercase tracking-wider">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-dashed border-ink/15 pb-3">
+                    <span className="font-mono text-[10px] sm:text-[11px] font-bold text-ink/60 uppercase tracking-wider">
                       {project.category}
                     </span>
-                    <span className="rounded-full border border-ink bg-clay-sky px-2.5 py-0.5 font-mono text-[10px] font-bold text-ink">
+                    <span className="rounded-full border border-ink bg-clay-sky px-2.5 py-0.5 font-mono text-[10px] font-bold text-ink whitespace-nowrap">
                       {project.badge}
                     </span>
                   </div>
@@ -594,14 +594,14 @@ export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
         <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
           {filteredIndependentProjects.map((project, idx) => (
             <Reveal key={idx} delay={idx * 80}>
-              <article className="clay-brutal group flex h-full flex-col justify-between rounded-clay bg-white p-6 transition-all hover:-translate-y-1">
+              <article className="clay-brutal group flex h-full flex-col justify-between rounded-clay bg-white p-5 sm:p-6 transition-all hover:-translate-y-1">
                 <div>
                   {/* Top Meta Header */}
-                  <div className="flex items-center justify-between gap-2 border-b-2 border-dashed border-ink/15 pb-3">
-                    <span className="font-mono text-[11px] font-bold text-ink/60 uppercase tracking-wider">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-dashed border-ink/15 pb-3">
+                    <span className="font-mono text-[10px] sm:text-[11px] font-bold text-ink/60 uppercase tracking-wider">
                       {project.category}
                     </span>
-                    <span className="rounded-full border border-ink bg-clay-mint px-2.5 py-0.5 font-mono text-[10px] font-bold text-ink">
+                    <span className="rounded-full border border-ink bg-clay-mint px-2.5 py-0.5 font-mono text-[10px] font-bold text-ink whitespace-nowrap">
                       {project.badge}
                     </span>
                   </div>

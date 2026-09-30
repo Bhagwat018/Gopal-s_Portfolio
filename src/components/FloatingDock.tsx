@@ -62,7 +62,7 @@ export function FloatingDock({ onCopyEmail }: FloatingDockProps) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 30, scale: 0.9 }}
           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 sm:gap-1.5 rounded-full border-2 sm:border-3 border-ink bg-white/95 px-2.5 sm:px-3 py-1.5 sm:py-2 shadow-brutal backdrop-blur-md max-w-[95vw]"
+          className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center flex-nowrap whitespace-nowrap overflow-x-auto no-scrollbar gap-1 sm:gap-1.5 rounded-full border-2 sm:border-3 border-ink bg-white/95 px-2.5 sm:px-3 py-1.5 sm:py-2 shadow-brutal backdrop-blur-md max-w-[96vw]"
         >
           {/* Back to top */}
           <div className="relative">
