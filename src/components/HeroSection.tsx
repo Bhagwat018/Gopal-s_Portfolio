@@ -13,6 +13,7 @@ import {
   Activity,
   Layers,
   Sparkles,
+  Phone,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -201,6 +202,13 @@ export function HeroSection({ onCopyEmail }: HeroSectionProps) {
                 {pill}
               </span>
             ))}
+            <a
+              href={PERSONAL_DATA.profile.telUrl}
+              className="rounded-full border-2 border-ink/40 bg-clay-sky/60 px-3.5 py-1.5 shadow-brutal-sm hover:bg-clay-sky transition inline-flex items-center gap-1.5"
+            >
+              <Phone className="h-3 w-3 text-ink" />
+              <span>{PERSONAL_DATA.profile.phoneDisplay}</span>
+            </a>
           </motion.div>
         </div>
 

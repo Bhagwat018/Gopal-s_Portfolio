@@ -39,7 +39,7 @@ export function ExperienceSection() {
               Experience &amp; Milestones
             </h2>
           </div>
-          <p className="font-mono text-xs text-ink/60">// 3+ years shipping code</p>
+          <p className="font-mono text-xs text-ink/60">// 2.5+ years shipping code</p>
         </div>
       </Reveal>
 
@@ -119,6 +119,25 @@ export function ExperienceSection() {
                   ))}
                 </ul>
               </div>
+
+              {/* Technologies & Tooling Strip */}
+              {exp.technologies && exp.technologies.length > 0 && (
+                <div className="mt-6 border-t-2 border-dashed border-ink/15 pt-4">
+                  <h4 className="font-mono text-xs uppercase tracking-wider font-bold text-ink/60 mb-2.5">
+                    Technologies &amp; Environment
+                  </h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {exp.technologies.map((tech, tIdx) => (
+                      <span
+                        key={tIdx}
+                        className="rounded-full border border-ink/30 bg-paper px-2.5 py-0.5 font-mono text-[11px] font-semibold text-ink/85 hover:border-ink transition"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </Reveal>
         ))}

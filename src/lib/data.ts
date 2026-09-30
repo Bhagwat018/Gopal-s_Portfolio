@@ -43,6 +43,7 @@ export interface Experience {
   current?: boolean;
   description: string;
   responsibilities: string[];
+  technologies: string[];
 }
 
 export interface MilestoneHighlight {
@@ -89,16 +90,16 @@ export const PERSONAL_DATA = {
     tagline: "import { Dev } from 'react-native'",
     resumeUrl: "/resume.pdf",
     shortSummary:
-      "Results-driven Mobile Engineer with 3+ years of React Native experience delivering 6+ production apps for iOS, Android, and Amazon.",
+      "Results-driven Mobile Engineer with 2.5+ years of React Native experience delivering 6+ production apps for iOS, Android, and Amazon.",
     longSummary:
       "I specialize in cross-platform mobile app development, native bridging (Kotlin/Swift), and real-time streaming integrations. Recipient of the Code Commander Award 2025 for outstanding technical contributions and project delivery.",
     stats: [
-      { value: "3+", label: "Years experience", bgColor: "bg-accent" },
+      { value: "2.5+", label: "Years experience", bgColor: "bg-accent" },
       { value: "6+", label: "Production apps published", bgColor: "bg-clay-sky" },
       { value: "2025", label: "Code Commander Award", bgColor: "bg-clay-pink" },
     ],
     pills: [
-      "3+ yrs experience",
+      "2.5+ yrs experience",
       "6+ apps published",
       "Indore, MP, India",
     ],
@@ -178,6 +179,17 @@ export const PERSONAL_DATA = {
         "Design clear TypeScript type definitions and ergonomic API interfaces for consumer developers",
         "Ensure full compatibility across React Native architectures including Old Architecture and New Architecture (TurboModules)",
       ],
+      technologies: [
+        "React Native",
+        "Turbo Modules",
+        "Kotlin",
+        "Swift",
+        "Android Studio",
+        "Xcode",
+        "TypeScript",
+        "NPM Registry",
+        "CI/CD Workflows",
+      ],
     },
     {
       company: "Ideal IT Techno Pvt Ltd",
@@ -194,6 +206,15 @@ export const PERSONAL_DATA = {
         "Integrated In-App Purchases (StoreKit & Google Play Billing) with backend verification and receipt validation",
         "Collaborated with UI/UX designers to implement pixel-perfect micro-animations and responsive component libraries",
         "Recipient of the prestigious Code Commander Award 2025 for technical excellence and impact",
+      ],
+      technologies: [
+        "React Native CLI",
+        "SQLite (Offline-First)",
+        "Hermes Engine",
+        "In-App Purchases (StoreKit & Billing)",
+        "Firebase",
+        "Redux Toolkit",
+        "Google Play Console",
       ],
     },
   ] as Experience[],

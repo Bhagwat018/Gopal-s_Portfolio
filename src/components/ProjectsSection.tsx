@@ -19,9 +19,15 @@ import {
   Sparkles,
   BookOpen,
   Play,
+  Pause,
   Layers,
   Smartphone,
   ShieldCheck,
+  Search,
+  X,
+  Volume2,
+  RefreshCw,
+  Zap,
 } from "lucide-react";
 
 interface ProjectsSectionProps {
@@ -30,11 +36,38 @@ interface ProjectsSectionProps {
 
 export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
   const [activeFilter, setActiveFilter] = useState<"all" | "apps" | "sdk">("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [copiedPkg, setCopiedPkg] = useState<string | null>(null);
 
+  // Interactive Mockup Playground States
+  const [truvideoPing, setTruvideoPing] = useState<"idle" | "pinging" | "done">("idle");
+  const [kickscoreLive, setKickscoreLive] = useState(false);
+  const [visualibleMode, setVisualibleMode] = useState<"reader" | "ai">("reader");
+  const [veelsPlaying, setVeelsPlaying] = useState(false);
+  const [savekitWriting, setSavekitWriting] = useState(false);
+  const [invoicelyTaxType, setInvoicelyTaxType] = useState<"gst" | "vat">("gst");
+
   const filteredProjects = PERSONAL_DATA.featuredProjects.filter((p) => {
-    if (activeFilter === "all") return true;
-    return p.type === activeFilter;
+    const matchesFilter = activeFilter === "all" || p.type === activeFilter;
+    const query = searchQuery.trim().toLowerCase();
+    const matchesSearch =
+      !query ||
+      p.title.toLowerCase().includes(query) ||
+      p.subtitle.toLowerCase().includes(query) ||
+      p.description.toLowerCase().includes(query) ||
+      p.tags.some((t) => t.toLowerCase().includes(query));
+    return matchesFilter && matchesSearch;
+  });
+
+  const filteredIndependentProjects = PERSONAL_DATA.independentProjects.filter((p) => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return true;
+    return (
+      p.title.toLowerCase().includes(query) ||
+      p.subtitle.toLowerCase().includes(query) ||
+      p.description.toLowerCase().includes(query) ||
+      p.tags.some((t) => t.toLowerCase().includes(query))
+    );
   });
 
   const handleCopyCommand = (command: string, pkgId: string) => {
@@ -85,6 +118,15 @@ export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
 
   const renderProjectVisualMockup = (project: Project) => {
     if (project.id === "truvideo") {
+      const handleTestBridge = () => {
+        if (truvideoPing !== "idle") return;
+        setTruvideoPing("pinging");
+        setTimeout(() => {
+          setTruvideoPing("done");
+          setTimeout(() => setTruvideoPing("idle"), 2500);
+        }, 500);
+      };
+
       return (
         <div className="rounded-xl border-2 border-ink bg-clay-sky/40 p-3 shadow-clay font-mono text-[11px]">
           <div className="flex items-center justify-between border-b border-ink/15 pb-2">
@@ -92,21 +134,48 @@ export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
               <Cpu className="h-3.5 w-3.5 text-indigo" />
               TurboModule Bridge
             </span>
-            <span className="flex items-center gap-1 rounded-full bg-ink px-2 py-0.5 text-[9px] font-bold text-accent">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-              Connected
-            </span>
+            <button
+              onClick={handleTestBridge}
+              className="btn-press flex items-center gap-1 rounded-full border border-ink bg-white px-2 py-0.5 text-[9px] font-bold text-ink hover:bg-accent transition"
+            >
+              {truvideoPing === "idle" && (
+                <>
+                  <Zap className="h-2.5 w-2.5 text-indigo" />
+                  <span>Test Bridge</span>
+                </>
+              )}
+              {truvideoPing === "pinging" && (
+                <>
+                  <RefreshCw className="h-2.5 w-2.5 text-indigo animate-spin" />
+                  <span>Bridging...</span>
+                </>
+              )}
+              {truvideoPing === "done" && (
+                <>
+                  <Check className="h-2.5 w-2.5 text-green-600 stroke-[3]" />
+                  <span className="text-green-800">0.8ms OK</span>
+                </>
+              )}
+            </button>
           </div>
           <div className="mt-2.5 grid grid-cols-2 gap-2 text-[10px]">
             <div className="rounded-lg border border-ink/20 bg-white/90 p-2">
-              <p className="text-ink/60">IPC Roundtrip</p>
-              <p className="font-display text-sm font-bold text-ink">1.2 ms</p>
+              <p className="text-ink/60">JNI Roundtrip</p>
+              <p className="font-display text-sm font-bold text-ink">
+                {truvideoPing === "done" ? "0.8 ms (Live)" : "1.2 ms (Hermes)"}
+              </p>
             </div>
             <div className="rounded-lg border border-ink/20 bg-white/90 p-2">
               <p className="text-ink/60">Native Threads</p>
               <p className="font-display text-sm font-bold text-ink">Kotlin + Swift</p>
             </div>
           </div>
+          {truvideoPing === "done" && (
+            <div className="mt-2 rounded border border-green-600 bg-green-50 px-2 py-1 text-[9px] font-bold text-green-800 animate-pop flex items-center justify-between">
+              <span>IPC Bridge ACK received</span>
+              <span>100% Sync</span>
+            </div>
+          )}
         </div>
       );
     }
@@ -119,14 +188,26 @@ export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
               <Activity className="h-3.5 w-3.5 text-indigo" />
               Live Sports Match
             </span>
-            <span className="flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[9px] font-bold text-white">
+            <button
+              onClick={() => setKickscoreLive(!kickscoreLive)}
+              className="btn-press flex items-center gap-1 rounded-full bg-red-600 px-2 py-0.5 text-[9px] font-bold text-white transition hover:bg-black"
+            >
               <span className="h-1.5 w-1.5 rounded-full bg-white animate-ping" />
-              84&apos; LIVE
-            </span>
+              {kickscoreLive ? "88' GOAL! ⚽" : "84' LIVE"}
+            </button>
           </div>
           <div className="mt-2.5 flex items-center justify-between rounded-lg border border-ink/20 bg-white/90 p-2 font-display">
             <span className="text-xs font-bold text-ink">ARS</span>
-            <span className="rounded bg-ink px-2 py-0.5 text-sm font-black text-paper">2 - 1</span>
+            <div className="text-center">
+              <span className="rounded bg-ink px-2.5 py-0.5 text-sm font-black text-paper">
+                {kickscoreLive ? "3 - 1" : "2 - 1"}
+              </span>
+              {kickscoreLive && (
+                <p className="text-[9px] font-mono text-indigo font-bold mt-0.5 animate-bounce">
+                  ⚽ Saka 88&apos;
+                </p>
+              )}
+            </div>
             <span className="text-xs font-bold text-ink">CHE</span>
           </div>
         </div>
@@ -139,22 +220,49 @@ export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
           <div className="flex items-center justify-between border-b border-ink/15 pb-2">
             <span className="flex items-center gap-1.5 font-bold text-ink">
               <BookOpen className="h-3.5 w-3.5 text-indigo" />
-              AI Contextual eBook Reader
+              AI eBook Engine
             </span>
-            <span className="flex items-center gap-1 rounded-full bg-ink px-2 py-0.5 text-[9px] font-bold text-accent">
-              EPUB.js Engine
-            </span>
-          </div>
-          <div className="mt-2.5 grid grid-cols-2 gap-2 text-[10px]">
-            <div className="rounded-lg border border-ink/20 bg-white/90 p-2">
-              <p className="text-ink/60">Page Flip Latency</p>
-              <p className="font-display text-sm font-bold text-ink">60 FPS Smooth</p>
+            <div className="flex items-center gap-1 rounded-md border border-ink/20 bg-white p-0.5 text-[9px]">
+              <button
+                onClick={() => setVisualibleMode("reader")}
+                className={`rounded px-1.5 py-0.5 font-bold transition ${
+                  visualibleMode === "reader" ? "bg-ink text-paper" : "text-ink/60"
+                }`}
+              >
+                Reader
+              </button>
+              <button
+                onClick={() => setVisualibleMode("ai")}
+                className={`rounded px-1.5 py-0.5 font-bold transition ${
+                  visualibleMode === "ai" ? "bg-ink text-paper" : "text-ink/60"
+                }`}
+              >
+                AI Context
+              </button>
             </div>
-            <div className="rounded-lg border border-ink/20 bg-white/90 p-2">
-              <p className="text-ink/60">Offline Storage</p>
-              <p className="font-display text-sm font-bold text-ink">SQLite Encrypted</p>
-            </div>
           </div>
+
+          {visualibleMode === "reader" ? (
+            <div className="mt-2 rounded-lg border border-ink/20 bg-white/90 p-2.5">
+              <p className="text-[10px] text-ink/80 italic font-serif leading-snug">
+                &ldquo;React Native bridges TurboModules directly into the Hermes bytecode runtime with sub-millisecond execution.&rdquo;
+              </p>
+              <div className="mt-2 flex items-center justify-between text-[9px] text-ink/60 font-mono border-t border-ink/10 pt-1">
+                <span>Page 42 of 310</span>
+                <span className="font-bold text-indigo">60 FPS Smooth Flip</span>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-2 rounded-lg border border-ink/20 bg-white/90 p-2 animate-pop">
+              <div className="flex items-center justify-between text-[9px] font-bold text-indigo">
+                <span>AI Knowledge Graph</span>
+                <span className="rounded bg-accent px-1 text-ink font-bold">Cached</span>
+              </div>
+              <p className="mt-1 text-[10px] text-ink/80 font-sans leading-tight">
+                <strong>Hermes:</strong> Facebook&apos;s lightweight JS engine tuned for fast React Native app launches on Android.
+              </p>
+            </div>
+          )}
         </div>
       );
     }
@@ -165,20 +273,45 @@ export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
           <div className="flex items-center justify-between border-b border-ink/15 pb-2">
             <span className="flex items-center gap-1.5 font-bold text-ink">
               <Play className="h-3.5 w-3.5 text-indigo" />
-              Adaptive HLS Video Feed
+              Adaptive HLS Player
             </span>
-            <span className="rounded-full bg-ink px-2 py-0.5 text-[9px] font-bold text-paper">
-              HLS Player
-            </span>
+            <button
+              onClick={() => setVeelsPlaying(!veelsPlaying)}
+              className="btn-press flex items-center gap-1 rounded-full bg-ink px-2 py-0.5 text-[9px] font-bold text-paper hover:bg-accent hover:text-ink transition"
+            >
+              {veelsPlaying ? (
+                <>
+                  <Pause className="h-2.5 w-2.5" />
+                  <span>Streaming</span>
+                </>
+              ) : (
+                <>
+                  <Play className="h-2.5 w-2.5 fill-current" />
+                  <span>Play HLS</span>
+                </>
+              )}
+            </button>
           </div>
-          <div className="mt-2.5 grid grid-cols-2 gap-2 text-[10px]">
-            <div className="rounded-lg border border-ink/20 bg-white/90 p-2">
-              <p className="text-ink/60">Buffer Preload</p>
-              <p className="font-display text-sm font-bold text-ink">0.4s Instant</p>
+
+          <div className="mt-2.5 rounded-lg border border-ink/20 bg-white/90 p-2">
+            <div className="flex items-center justify-between text-[10px]">
+              <span className="text-ink/70">1080p60 Adaptive Bitrate</span>
+              <span className="font-bold text-indigo">4.8 Mbps</span>
             </div>
-            <div className="rounded-lg border border-ink/20 bg-white/90 p-2">
-              <p className="text-ink/60">Feed Scrolling</p>
-              <p className="font-display text-sm font-bold text-ink">Full Viewport</p>
+            {/* Scrubber progress */}
+            <div className="mt-1.5 h-1.5 w-full rounded-full bg-ink/10 overflow-hidden">
+              <div
+                className={`h-full bg-indigo transition-all duration-500 ${
+                  veelsPlaying ? "w-3/4 animate-pulse" : "w-1/4"
+                }`}
+              />
+            </div>
+            <div className="mt-1.5 flex items-center justify-between text-[9px] text-ink/60">
+              <span>{veelsPlaying ? "01:24 / 03:45" : "00:00 / 03:45"}</span>
+              <span className="flex items-center gap-0.5">
+                <Volume2 className="h-2.5 w-2.5 text-indigo" />
+                {veelsPlaying ? "Stereo AAC" : "Muted"}
+              </span>
             </div>
           </div>
         </div>
@@ -186,6 +319,11 @@ export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
     }
 
     if (project.id === "savekit") {
+      const handleSaveRecord = () => {
+        setSavekitWriting(true);
+        setTimeout(() => setSavekitWriting(false), 2000);
+      };
+
       return (
         <div className="rounded-xl border-2 border-ink bg-clay-mint/40 p-3 shadow-clay font-mono text-[11px]">
           <div className="flex items-center justify-between border-b border-ink/15 pb-2">
@@ -193,20 +331,35 @@ export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
               <Database className="h-3.5 w-3.5 text-indigo" />
               Offline SQLite Vault
             </span>
-            <span className="rounded-full border border-ink/20 bg-white px-2 py-0.5 text-[9px] font-bold text-ink">
-              AES-256
-            </span>
+            <button
+              onClick={handleSaveRecord}
+              className="btn-press flex items-center gap-1 rounded-full border border-ink bg-white px-2 py-0.5 text-[9px] font-bold text-ink hover:bg-clay-mint transition"
+            >
+              {savekitWriting ? (
+                <>
+                  <Check className="h-2.5 w-2.5 text-green-600 stroke-[3]" />
+                  <span>Written!</span>
+                </>
+              ) : (
+                <span>Write Record</span>
+              )}
+            </button>
           </div>
           <div className="mt-2.5 grid grid-cols-2 gap-2 text-[10px]">
             <div className="rounded-lg border border-ink/20 bg-white/90 p-2">
-              <p className="text-ink/60">Local Query</p>
-              <p className="font-display text-sm font-bold text-ink">&lt; 0.5 ms</p>
+              <p className="text-ink/60">Local Latency</p>
+              <p className="font-display text-sm font-bold text-ink">&lt; 0.4 ms</p>
             </div>
             <div className="rounded-lg border border-ink/20 bg-white/90 p-2">
-              <p className="text-ink/60">Offline Sync</p>
-              <p className="font-display text-sm font-bold text-ink">100% Up</p>
+              <p className="text-ink/60">Encryption</p>
+              <p className="font-display text-sm font-bold text-ink">AES-256 DB</p>
             </div>
           </div>
+          {savekitWriting && (
+            <div className="mt-2 rounded border border-green-600 bg-green-50 px-2 py-1 text-[9px] font-bold text-green-800 animate-pop">
+              ✓ Encrypted blob saved to SQLite sandbox (0.3ms)
+            </div>
+          )}
         </div>
       );
     }
@@ -217,20 +370,40 @@ export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
         <div className="flex items-center justify-between border-b border-ink/15 pb-2">
           <span className="flex items-center gap-1.5 font-bold text-ink">
             <Receipt className="h-3.5 w-3.5 text-indigo" />
-            Tax Invoice Generator
+            Tax Invoice Suite
           </span>
-          <span className="rounded-full bg-ink px-2 py-0.5 text-[9px] font-bold text-paper">
-            PDF Ready
-          </span>
-        </div>
-        <div className="mt-2.5 flex items-center justify-between rounded-lg border border-ink/20 bg-white/90 p-2">
-          <div>
-            <p className="text-[9px] text-ink/60">INV-2026-042</p>
-            <p className="font-display text-xs font-bold text-ink">Tax Summary: GST / VAT</p>
+          <div className="flex items-center gap-1 rounded-md border border-ink/20 bg-white p-0.5 text-[9px]">
+            <button
+              onClick={() => setInvoicelyTaxType("gst")}
+              className={`rounded px-1.5 py-0.5 font-bold transition ${
+                invoicelyTaxType === "gst" ? "bg-ink text-paper" : "text-ink/60"
+              }`}
+            >
+              GST (18%)
+            </button>
+            <button
+              onClick={() => setInvoicelyTaxType("vat")}
+              className={`rounded px-1.5 py-0.5 font-bold transition ${
+                invoicelyTaxType === "vat" ? "bg-ink text-paper" : "text-ink/60"
+              }`}
+            >
+              VAT (20%)
+            </button>
           </div>
-          <span className="rounded border border-ink/20 bg-clay-mint px-1.5 py-0.5 font-mono text-[10px] font-bold text-ink">
-            Verified
-          </span>
+        </div>
+        <div className="mt-2.5 rounded-lg border border-ink/20 bg-white/90 p-2">
+          <div className="flex items-center justify-between text-[10px]">
+            <span className="text-ink/60">Subtotal: $1,200.00</span>
+            <span className="font-mono text-[9px] font-bold text-indigo">
+              {invoicelyTaxType === "gst" ? "+$216 GST" : "+$240 VAT"}
+            </span>
+          </div>
+          <div className="mt-1 flex items-center justify-between border-t border-ink/10 pt-1">
+            <span className="font-bold text-ink">Grand Total:</span>
+            <span className="font-display font-bold text-ink text-xs">
+              {invoicelyTaxType === "gst" ? "$1,416.00" : "$1,440.00"}
+            </span>
+          </div>
         </div>
       </div>
     );
@@ -252,33 +425,56 @@ export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
           <p className="font-mono text-xs text-ink/60">// published &amp; live</p>
         </div>
 
-        {/* Filter Pills */}
-        <div className="mt-6 flex flex-wrap gap-2">
-          {[
-            { id: "all", label: "All Production", count: PERSONAL_DATA.featuredProjects.length },
-            {
-              id: "apps",
-              label: "Mobile & Web",
-              count: PERSONAL_DATA.featuredProjects.filter((p) => p.type === "apps").length,
-            },
-            {
-              id: "sdk",
-              label: "SDK & Turbo Modules",
-              count: PERSONAL_DATA.featuredProjects.filter((p) => p.type === "sdk").length,
-            },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveFilter(tab.id as typeof activeFilter)}
-              className={`btn-press rounded-full border-2 border-ink px-4 py-1.5 font-mono text-xs font-bold transition shadow-brutal-sm ${
-                activeFilter === tab.id
-                  ? "bg-ink text-paper"
-                  : "bg-white text-ink hover:bg-clay-sky"
-              }`}
-            >
-              {tab.label} ({tab.count})
-            </button>
-          ))}
+        {/* Filter Pills & Interactive Search Bar */}
+        <div className="mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-2">
+            {[
+              { id: "all", label: "All Production", count: PERSONAL_DATA.featuredProjects.length },
+              {
+                id: "apps",
+                label: "Mobile & Web",
+                count: PERSONAL_DATA.featuredProjects.filter((p) => p.type === "apps").length,
+              },
+              {
+                id: "sdk",
+                label: "SDK & Turbo Modules",
+                count: PERSONAL_DATA.featuredProjects.filter((p) => p.type === "sdk").length,
+              },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveFilter(tab.id as typeof activeFilter)}
+                className={`btn-press rounded-full border-2 border-ink px-4 py-1.5 font-mono text-xs font-bold transition shadow-brutal-sm ${
+                  activeFilter === tab.id
+                    ? "bg-ink text-paper"
+                    : "bg-white text-ink hover:bg-clay-sky"
+                }`}
+              >
+                {tab.label} ({tab.count})
+              </button>
+            ))}
+          </div>
+
+          {/* Quick Technology Filter Bar */}
+          <div className="relative max-w-xs w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-ink/50" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search tech (e.g. SQLite, HLS)..."
+              className="w-full rounded-full border-2 border-ink bg-white pl-8 pr-8 py-1.5 font-mono text-xs text-ink placeholder:text-ink/40 shadow-brutal-sm focus:outline-none focus:border-indigo"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-ink/50 hover:text-ink"
+                title="Clear search"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
         </div>
       </Reveal>
 
@@ -358,6 +554,20 @@ export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
               </article>
             </motion.div>
           ))}
+          {filteredProjects.length === 0 && (
+            <div className="col-span-full rounded-clay border-2 border-dashed border-ink/30 bg-white p-8 text-center font-mono">
+              <p className="text-sm font-bold text-ink">No production projects match &quot;{searchQuery}&quot;</p>
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setActiveFilter("all");
+                }}
+                className="mt-3 rounded-full border-2 border-ink bg-accent px-4 py-1.5 text-xs font-bold text-ink shadow-brutal-sm hover:bg-ink hover:text-paper transition"
+              >
+                Reset Filter
+              </button>
+            </div>
+          )}
         </AnimatePresence>
       </motion.div>
 
@@ -376,13 +586,13 @@ export function ProjectsSection({ onCopyText }: ProjectsSectionProps) {
                 // built &amp; launched end-to-end as independent consumer products
               </p>
             </div>
-            <p className="font-mono text-xs text-indigo font-bold">2 Apps Published</p>
+            <p className="font-mono text-xs text-indigo font-bold">{filteredIndependentProjects.length} Apps Published</p>
           </div>
         </Reveal>
 
         {/* Independent Projects Grid */}
         <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {PERSONAL_DATA.independentProjects.map((project, idx) => (
+          {filteredIndependentProjects.map((project, idx) => (
             <Reveal key={idx} delay={idx * 80}>
               <article className="clay-brutal group flex h-full flex-col justify-between rounded-clay bg-white p-6 transition-all hover:-translate-y-1">
                 <div>

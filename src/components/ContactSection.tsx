@@ -20,12 +20,29 @@ interface ContactSectionProps {
 
 export function ContactSection({ onCopyEmail }: ContactSectionProps) {
   const [copied, setCopied] = useState(false);
+  const [senderName, setSenderName] = useState("");
+  const [senderTopic, setSenderTopic] = useState("Mobile App Project");
+  const [senderMessage, setSenderMessage] = useState("");
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(PERSONAL_DATA.profile.email);
     setCopied(true);
     if (onCopyEmail) onCopyEmail();
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSendWhatsApp = (e: React.FormEvent) => {
+    e.preventDefault();
+    const text = `Hi Gopal! My name is ${senderName || "Visitor"}. I'm reaching out regarding: ${senderTopic}.\n\n${senderMessage || "I'd love to connect and discuss opportunities!"}`;
+    const url = `https://wa.me/916267957589?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank");
+  };
+
+  const handleSendEmail = (e: React.FormEvent) => {
+    e.preventDefault();
+    const subject = `[Portfolio Inquiry] ${senderTopic} - ${senderName || "Visitor"}`;
+    const body = `Hi Gopal,\n\nName: ${senderName || "Not provided"}\nTopic: ${senderTopic}\n\nMessage:\n${senderMessage || "I'd like to get in touch regarding a mobile engineering project or role."}`;
+    window.location.href = `mailto:${PERSONAL_DATA.profile.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   return (
@@ -160,6 +177,87 @@ export function ContactSection({ onCopyEmail }: ContactSectionProps) {
                 @Bhagwat018
               </span>
             </a>
+          </div>
+
+          {/* Instant Message Composer */}
+          <div className="mt-10 rounded-clay border-3 border-ink bg-white p-6 sm:p-8 text-left shadow-clay text-ink max-w-2xl mx-auto">
+            <div className="flex items-center justify-between border-b-2 border-dashed border-ink/15 pb-3">
+              <div>
+                <h3 className="font-display text-lg sm:text-xl font-bold text-ink">
+                  ⚡ Send a Quick Note
+                </h3>
+                <p className="font-mono text-xs text-ink/60 mt-0.5">
+                  Type your message and dispatch directly to WhatsApp or Email
+                </p>
+              </div>
+              <span className="rounded-full border border-ink bg-clay-mint px-2.5 py-0.5 font-mono text-[10px] font-bold text-ink hidden sm:inline-block">
+                Instant Dispatch
+              </span>
+            </div>
+
+            <form className="mt-5 space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-mono text-xs font-bold text-ink mb-1.5">
+                    Your Name / Org
+                  </label>
+                  <input
+                    type="text"
+                    value={senderName}
+                    onChange={(e) => setSenderName(e.target.value)}
+                    placeholder="e.g. Alex (Engineering Lead)"
+                    className="w-full rounded-xl border-2 border-ink bg-paper px-3 py-2 font-mono text-xs text-ink placeholder:text-ink/40 focus:outline-none focus:border-indigo"
+                  />
+                </div>
+                <div>
+                  <label className="block font-mono text-xs font-bold text-ink mb-1.5">
+                    Subject / Topic
+                  </label>
+                  <select
+                    value={senderTopic}
+                    onChange={(e) => setSenderTopic(e.target.value)}
+                    className="w-full rounded-xl border-2 border-ink bg-paper px-3 py-2 font-mono text-xs text-ink focus:outline-none focus:border-indigo"
+                  >
+                    <option value="Mobile App Project">📱 New Mobile App Project</option>
+                    <option value="Full-Time Engineering Role">💼 Full-Time Engineering Role</option>
+                    <option value="SDK & Turbo Modules">⚡ SDK &amp; Native Bridges</option>
+                    <option value="General Consultation">💬 General Tech Question</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-mono text-xs font-bold text-ink mb-1.5">
+                  Your Message
+                </label>
+                <textarea
+                  rows={3}
+                  value={senderMessage}
+                  onChange={(e) => setSenderMessage(e.target.value)}
+                  placeholder="Hey Gopal, I came across your portfolio and would like to talk about..."
+                  className="w-full rounded-xl border-2 border-ink bg-paper px-3 py-2 font-mono text-xs text-ink placeholder:text-ink/40 focus:outline-none focus:border-indigo resize-none"
+                />
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={handleSendWhatsApp}
+                  className="btn-press w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 rounded-full border-2 border-ink bg-clay-mint px-5 py-2.5 font-mono text-xs font-bold text-ink shadow-brutal-sm hover:bg-ink hover:text-paper transition"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  <span>Send via WhatsApp ↗</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSendEmail}
+                  className="btn-press w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 rounded-full border-2 border-ink bg-clay-sky px-5 py-2.5 font-mono text-xs font-bold text-ink shadow-brutal-sm hover:bg-ink hover:text-paper transition"
+                >
+                  <Mail className="h-4 w-4" />
+                  <span>Send via Email ↗</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </Reveal>
